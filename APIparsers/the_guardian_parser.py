@@ -1,17 +1,5 @@
 import requests
 
-from enum import Enum
-
-
-class ArticleTagsEnum(Enum):
-    all = 0,
-    sport = 1,
-    economy = 2,
-    science = 3,
-    musics = 4,
-    films = 5,
-    politics = 6
-
 
 class TheGuardianParser:
     _MAX_PAGE_SIZE = 50
@@ -23,7 +11,6 @@ class TheGuardianParser:
 
     def get_articles(self, tag, count_articles):
         page_count = count_articles // self._MAX_PAGE_SIZE + (count_articles % self._MAX_PAGE_SIZE > 0)
-        print(page_count)
         articles = []
 
         for page_number in range(1, page_count + 1):
