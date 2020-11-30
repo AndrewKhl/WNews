@@ -1,26 +1,14 @@
 from APIparsers.TheGuardianParser import TheGuardianParser
 from MachineLearning.TextManager import ArticleTagsEnum, TextManager
-from MachineLearning.SvmManager import SvmManager
+from MachineLearning.SvmLib import SvmAdapter, SvmManager
+
 
 def main():
-    guardian_parser = TheGuardianParser()
+    manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.films)
 
-    current_tag = ArticleTagsEnum.films
-
-    articles = guardian_parser.get_articles(current_tag, 10)
-
-    print("Articles count =", len(articles))
-
-    text_manager = TextManager()
-
-    matrix, dict = text_manager.process_articles(articles, 100)
-
-    svm = SvmManager(current_tag)
-
-    yy = svm.get_label_matrix(matrix, len(ArticleTagsEnum))
-
-    for x, y in zip(matrix, yy):
-        print(x, y)
+    x, y = manager.get_train_data(100, 100)
+    manager.train_adapters(x, y)
+    manager.save_all_states()
 
     print("Finish")
 

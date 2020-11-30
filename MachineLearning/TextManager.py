@@ -32,11 +32,11 @@ class TextManager:
         #nltk.download('punkt')
         pass
 
-    def process_articles(self, articles, vector_size):
+    def process_articles(self, articles, vector_size, dictionary=None):
         self.current_counter.clear()
         matrix = [self._convert_article(article) for article in articles]
 
-        current_dict = [t[0] for t in self.current_counter.most_common(vector_size)]
+        current_dict = [t[0] for t in self.current_counter.most_common(vector_size)] if dictionary is None else dictionary
         return np.array([self._get_features_vector(row, current_dict) for row in matrix]), current_dict
 
     @staticmethod
