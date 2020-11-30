@@ -1,4 +1,4 @@
-from APIparsers.the_guardian_parser import TheGuardianParser
+from APIparsers.TheGuardianParser import TheGuardianParser
 from MachineLearning.TextManager import ArticleTagsEnum, TextManager
 
 

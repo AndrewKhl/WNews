@@ -2,6 +2,7 @@ import re
 import nltk
 import collections
 import numpy as np
+
 from nltk.stem import PorterStemmer
 from enum import Enum
 
