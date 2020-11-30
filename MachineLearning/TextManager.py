@@ -22,7 +22,7 @@ class TextManager:
         'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)')
     _email_regs = re.compile('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
     _number_regs = re.compile('[0-9.]+')
-    _text_regs = re.compile('[#&%+:;\[\]/|><=`()@,\'\"!?\-}{*_\-®]')
+    _text_regs = re.compile('[#&%+:;\[\]/|><=`()@,\'\"!?\-}{*_\-®•“’”…‘–]')
     _porter_stemmer = PorterStemmer()
 
     current_counter = collections.Counter()
@@ -32,8 +32,19 @@ class TextManager:
         pass
 
     def process_articles(self, articles):
+        self.current_counter.clear()
         matrix = [self._convert_article(article) for article in articles]
-        return matrix
+
+        current_dict = [t[0] for t in self.current_counter.most_common(100)]
+        return np.array([self._get_features_vector(row, current_dict) for row in matrix]), current_dict
+
+    @staticmethod
+    def _get_features_vector(words, dictionary):
+        vector = np.zeros(len(dictionary))
+        for i, key in enumerate(dictionary):
+            if key in words:
+                vector[i] = 1
+        return vector
 
     def _convert_article(self, article):
         article = re.sub(self._html_regs, '', article.lower())

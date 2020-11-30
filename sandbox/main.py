@@ -1,6 +1,7 @@
 from APIparsers.the_guardian_parser import TheGuardianParser
 from MachineLearning.TextManager import ArticleTagsEnum, TextManager
 
+
 def main():
     guardian_parser = TheGuardianParser()
     articles = guardian_parser.get_articles(ArticleTagsEnum.films, 10)
@@ -9,7 +10,10 @@ def main():
 
     text_manager = TextManager()
 
-    print(text_manager.process_articles(articles))
+    matrix, dict = text_manager.process_articles(articles)
+
+    print(matrix)
+    print(dict)
 
     print("Finish")
 
