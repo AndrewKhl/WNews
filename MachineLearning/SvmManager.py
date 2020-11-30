@@ -18,6 +18,11 @@ class SvmManager:
         self._svm.fit(x, y)
         return self._svm
 
+    def get_label_matrix(self, matrix, labels_count):
+        label_matrix = np.zeros((len(matrix), labels_count))
+        label_matrix[:, self._current_tag.value] = 1
+        return label_matrix
+
     def save_svm_state(self):
         joblib.dump(self._svm, self._model_cache_path)
 
