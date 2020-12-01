@@ -19,12 +19,12 @@ class SvmManager:
         self._tags = args
         self._adapters = [SvmAdapter(tag) for tag in args]
 
-    def get_train_data(self, articles_count, features_count):
+    def get_train_data(self, articles_count, features_count, shift_articles=0):
         X = None
         Y = None
 
         for tag, adapter in zip(self._tags, self._adapters):
-            articles = self._parser.get_articles(tag, articles_count)
+            articles = self._parser.get_articles(tag, articles_count)[shift_articles:]
             new_x, _ = self._text_manager.process_articles(articles, features_count)
             Y = self.add_rows(Y, adapter.get_label_matrix(new_x, len(ArticleTagsEnum)))
             X = self.add_rows(X, new_x)
@@ -35,6 +35,10 @@ class SvmManager:
         for tag, adapter in zip(self._tags, self._adapters):
             adapter.train_svm(X, Y[:, tag.value], 100, 0.01)
             print("Adapter {} has been fitting".format(tag))
+
+    def check_train_adapters(self, Xval, Yval):
+        for tag, adapter in zip(self._tags, self._adapters):
+            adapter.check_validation_svm(Xval, Yval[:, tag.value])
 
     def save_all_states(self):
         for adapter in self._adapters:
@@ -56,6 +60,14 @@ class SvmAdapter:
         self._svm = svm.SVC(C=C_coef, gamma=sigma_coef)
         self._svm.fit(x, y)
         return self._svm
+
+    def check_validation_svm(self, x, y):
+        y_predict = self._svm.predict(x)
+        good = 0
+        for i, predict in enumerate(y_predict):
+            if predict == y[i]:
+                good += 1
+        print("{} SVM Predict: ".format(self._current_tag), good, "Total: ", len(y), "{}%".format(good / len(y) * 100.0))
 
     def get_label_matrix(self, matrix, labels_count):
         label_matrix = np.zeros((len(matrix), labels_count))
