@@ -11,6 +11,9 @@ from MachineLearning.TextManager import ArticleTagsEnum, TextManager
 class SvmManager:
     _tags = None
     _adapters = None
+    _c_vector = None
+    _sigma_vector = None
+    _precision_vector = None
 
     _text_manager = TextManager()
     _parser = TheGuardianParser()
@@ -18,6 +21,10 @@ class SvmManager:
     def __init__(self, *args):
         self._tags = args
         self._adapters = [SvmAdapter(tag) for tag in args]
+
+        self._c_vector = np.zeros(len(args))
+        self._sigma_vector = np.zeros(len(args))
+        self._precision_vector = np.zeros(len(args))
 
     def get_train_data(self, articles_count, features_count, shift_articles=0):
         X = None
@@ -31,14 +38,18 @@ class SvmManager:
 
         return X, Y
 
-    def train_adapters(self, X, Y):
+    def train_adapters(self, X, Y, C_coef, sigma_coef):
         for tag, adapter in zip(self._tags, self._adapters):
-            adapter.train_svm(X, Y[:, tag.value], 100, 0.01)
+            adapter.train_svm(X, Y[:, tag.value], C_coef, sigma_coef)
             print("Adapter {} has been fitting".format(tag))
 
     def check_train_adapters(self, Xval, Yval):
-        for tag, adapter in zip(self._tags, self._adapters):
-            adapter.check_validation_svm(Xval, Yval[:, tag.value])
+        for i, adapter in enumerate(self._adapters):
+            current_precision = adapter.check_validation_svm(Xval, Yval[:, self._tags[i].value])
+            if self._precision_vector[i] < current_precision:
+                self._precision_vector[i] = current_precision
+                self._c_vector[i] = adapter.C_coef
+                self._sigma_vector[i] = adapter.sigma_coef
 
     def save_all_states(self):
         for adapter in self._adapters:
@@ -53,10 +64,15 @@ class SvmAdapter:
     _svm = None
     _current_tag = ArticleTagsEnum.all
 
+    C_coef = 0
+    sigma_coef = 0
+
     def __init__(self, tag):
         self._current_tag = tag
 
     def train_svm(self, x, y, C_coef, sigma_coef):
+        self.C_coef = C_coef
+        self.sigma_coef = sigma_coef
         self._svm = svm.SVC(C=C_coef, gamma=sigma_coef)
         self._svm.fit(x, y)
         return self._svm
@@ -68,6 +84,7 @@ class SvmAdapter:
             if predict == y[i]:
                 good += 1
         print("{} SVM Predict: ".format(self._current_tag), good, "Total: ", len(y), "{}%".format(good / len(y) * 100.0))
+        return good / len(y) * 100
 
     def get_label_matrix(self, matrix, labels_count):
         label_matrix = np.zeros((len(matrix), labels_count))
