@@ -9,6 +9,7 @@
     margin: 0 5px;
     border-radius: 5;
 }
+
 </style>
 {% endblock load_style %}
 
@@ -19,28 +20,28 @@
     <div class="col pb-2 btn-group blocks" role="group" aria-label="Filter buttons">
         <button type="button" class="btn btn-outline-primary">All</button>
         <button type="button" class="btn btn-outline-success">Economy</button>
+        <button type="button" class="btn btn-outline-danger">Sport</button>
         <button type="button" class="btn btn-outline-dark">Politics</button>
-        <button type="button" class="btn btn-outline-secondary">Sport</button>
-        <button type="button" class="btn btn-outline-danger">Science</button>
         <button type="button" class="btn btn-outline-warning">Music</button>
         <button type="button" class="btn btn-outline-info">Films</button>
+        <button type="button" class="btn btn-outline-secondary">Science</button>
     </div>
 </div>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for article in articles %}
-      <div class="col">
+    <div class="col">
         <div class="card h-100">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">{{article.title}}</h5>
-            <p class="card-text">{{article.text}}</p>
-          </div>
-          <div class="card-footer">
-            <small class="text-muted">Last updated 3 mins ago</small>
-          </div>
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{article.title}}</h5>
+                <p class="card-text">{{article.text}}</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Last updated 3 mins ago</small>
+            </div>
         </div>
-      </div>
+    </div>
     {% endfor %}
 </div>
 {% endblock main %}

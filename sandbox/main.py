@@ -7,15 +7,16 @@ from MachineLearning.SvmLib import SvmManager
 
 def main():
     warnings.filterwarnings('ignore')
-    manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.films)
+    manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.economy, ArticleTagsEnum.science,
+                         ArticleTagsEnum.musics, ArticleTagsEnum.films, ArticleTagsEnum.politics)
 
-    test_artiles_cnt = 1000
-    val_articles_cnt = 100
-    dict_len = 1000
+    test_artiles_cnt = 100
+    val_articles_cnt = 10
+    dict_len = 100
 
-    #c_arr = np.arange(0.1, 1000, 100)
-    c_arr = [100]
-    sigma_arr = np.arange(0.001, 0.01, 0.001)
+    c_arr = np.arange(0.1, 10000, 100)
+    #c_arr = [100]
+    sigma_arr = np.arange(0.001, 2, 0.0001)
 
     x, y = manager.get_train_data(test_artiles_cnt, dict_len)
 
@@ -30,11 +31,15 @@ def main():
             manager.train_adapters(x, y, c, sigma)
             manager.check_train_adapters(x_val, y_val)
 
-    #manager.save_all_states()
-
     print("Precision:", manager._precision_vector)
     print("C vector:", manager._c_vector)
     print("Sigma vector:", manager._sigma_vector)
+
+    for c, sigma in zip(manager._c_vector, manager._sigma_vector):
+        manager.train_adapters(x, y, c, sigma)
+
+    manager.save_all_states()
+
     print("Finish")
 
 
