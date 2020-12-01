@@ -9,9 +9,9 @@ def main():
     warnings.filterwarnings('ignore')
     manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.films)
 
-    test_artiles_cnt = 100
-    val_articles_cnt = 10
-    dict_len = 100
+    test_artiles_cnt = 1000
+    val_articles_cnt = 100
+    dict_len = 1000
 
     #c_arr = np.arange(0.1, 1000, 100)
     c_arr = [100]

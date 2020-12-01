@@ -3,8 +3,9 @@ import nltk
 import collections
 import numpy as np
 
-from nltk.stem import PorterStemmer
 from enum import Enum
+from nltk.stem import PorterStemmer
+from nltk.corpus import stopwords
 
 
 class ArticleTagsEnum(Enum):
@@ -24,13 +25,17 @@ class TextManager:
     _email_regs = re.compile('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
     _number_regs = re.compile('[0-9.]+')
     _text_regs = re.compile('[#&%+:;\[\]/|><=`()@,\'\"!?\-}{*_\-®•“’”…‘–]')
-    _porter_stemmer = PorterStemmer()
+
+    _porter_stemmer = None
+    _stop_worlds = None
 
     current_counter = collections.Counter()
 
     def __init__(self):
         #nltk.download('punkt')
-        pass
+        #nltk.download('stopwords')
+        self._porter_stemmer = PorterStemmer()
+        self._stop_worlds = set(stopwords.words('english'))
 
     def process_articles(self, articles, vector_size, dictionary=None):
         self.current_counter.clear()
@@ -55,10 +60,10 @@ class TextManager:
         article = article.replace('$', 'dollar ')
         article = re.sub(self._text_regs, '', article)
 
-        words = nltk.word_tokenize(article)
+        filtered_worlds = [w for w in nltk.word_tokenize(article) if w not in self._stop_worlds]
 
-        for i, word in enumerate(words):
-            words[i] = self._porter_stemmer.stem(word)
-            self.current_counter[words[i]] += 1
+        for i, word in enumerate(filtered_worlds):
+            filtered_worlds[i] = self._porter_stemmer.stem(word)
+            self.current_counter[filtered_worlds[i]] += 1
 
-        return words
+        return filtered_worlds
