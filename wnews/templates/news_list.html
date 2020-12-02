@@ -11,6 +11,8 @@
 }
 
 
+
+
 </style>
 {% endblock load_style %}
 
@@ -18,15 +20,18 @@
 
 <div class="row align-items-end">
     <div class="col display-2">WNews</div>
-    <div class="col pb-2 btn-group blocks" role="group" aria-label="Filter buttons">
-        <button type="button" class="btn btn-outline-primary">All</button>
-        <button type="button" class="btn btn-outline-success">Economy</button>
-        <button type="button" class="btn btn-outline-danger">Sport</button>
-        <button type="button" class="btn btn-outline-dark">Politics</button>
-        <button type="button" class="btn btn-outline-warning">Music</button>
-        <button type="button" class="btn btn-outline-info">Films</button>
-        <button type="button" class="btn btn-outline-secondary">Science</button>
-    </div>
+    <form method="GET" class="col pb-2" action="/filter_news">
+        {% csrf_token %}
+        <div class="btn-group blocks" role="group" aria-label="Filter buttons">
+            <button type="submit" class="btn btn-outline-primary" name="all">All</button>
+            <button type="submit" class="btn btn-outline-success" name="economy">Economy</button>
+            <button type="submit" class="btn btn-outline-danger" name="sport">Sport</button>
+            <button type="submit" class="btn btn-outline-dark" name="politics">Politics</button>
+            <button type="submit" class="btn btn-outline-warning" name="musics">Music</button>
+            <button type="submit" class="btn btn-outline-info" name="films">Films</button>
+            <button type="submit" class="btn btn-outline-secondary" name="science">Science</button>
+        </div>
+    </form>
 </div>
 
 <div class="row row-cols-1 row-cols-md-4 g-4">
