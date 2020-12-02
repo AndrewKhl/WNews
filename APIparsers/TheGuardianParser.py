@@ -1,5 +1,7 @@
 import requests
 
+from APIparsers.Models import ArticleModel
+
 
 class TheGuardianParser:
     _MAX_PAGE_SIZE = 50
@@ -15,10 +17,17 @@ class TheGuardianParser:
 
         for page_number in range(1, page_count + 1):
             response = self._get_response(tag, page_number)
-
             if response['status'] == 'ok':
                 for item_article in response['results']:
-                    articles.append(item_article['fields']['bodyText'])
+
+                    new_article = ArticleModel()
+                    new_article.title = item_article['webTitle']
+                    new_article.article_link = item_article['webUrl']
+                    new_article.last_update = item_article['webPublicationDate']
+                    new_article.text = item_article['fields']['bodyText']
+                    new_article.image_link = item_article['fields']['thumbnail']
+
+                    articles.append(new_article)
                     count_articles -= 1
                     if count_articles == 0:
                         break
@@ -31,11 +40,12 @@ class TheGuardianParser:
         return requests.get(
             self._API_SOURCE,
             params={
+                "q": tag.name,
                 "order-by": "newest",
-                "show-fields": "bodyText",
+                "show-fields": "bodyText,thumbnail",
                 "page-size": self._MAX_PAGE_SIZE,
                 "page": page,
-                "q": tag.name,
+                "show-tags": "contributor",
                 "api-key": self._API_KEY
             }
         ).json()['response']

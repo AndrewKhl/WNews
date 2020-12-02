@@ -5,8 +5,7 @@ import numpy as np
 from sklearn import svm
 
 from APIparsers.Models import ArticleTagsEnum
-from APIparsers.TheGuardianParser import TheGuardianParser
-from MachineLearning.TextManager import TextManager
+from MachineLearning.TextManager import TextProcessor, TextManager
 
 
 class SvmManager:
@@ -16,8 +15,8 @@ class SvmManager:
     _sigma_vector = None
     _precision_vector = None
 
+    _text_processor = TextProcessor()
     _text_manager = TextManager()
-    _parser = TheGuardianParser()
 
     def __init__(self, *args):
         self._tags = args
@@ -32,8 +31,8 @@ class SvmManager:
         Y = None
 
         for tag, adapter in zip(self._tags, self._adapters):
-            articles = self._parser.get_articles(tag, articles_count)[shift_articles:]
-            new_x, _ = self._text_manager.process_articles(articles, features_count)
+            _, texts = self._text_manager.get_articles(tag, articles_count)[shift_articles:]
+            new_x, _ = self._text_processor.process_articles(texts, features_count)
             Y = self.add_rows(Y, adapter.get_label_matrix(new_x, len(ArticleTagsEnum)))
             X = self.add_rows(X, new_x)
 

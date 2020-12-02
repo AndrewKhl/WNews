@@ -7,8 +7,18 @@ import numpy as np
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 
+from APIparsers.TheGuardianParser import TheGuardianParser
+
 
 class TextManager:
+    _parser = TheGuardianParser()
+
+    def get_articles(self, tag, count):
+        articles = self._parser.get_articles(tag, count)
+        return articles, [article.text for article in articles]
+
+
+class TextProcessor:
     _html_regs = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
     _url_regs = re.compile(
         'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)')

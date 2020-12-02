@@ -3,10 +3,24 @@ import warnings
 
 from APIparsers.Models import ArticleTagsEnum
 from MachineLearning.SvmLib import SvmManager
+from MachineLearning.TextManager import TextManager
 
 
 def main():
     warnings.filterwarnings('ignore')
+
+    text_manager = TextManager()
+
+    articles, texts = text_manager.get_articles(ArticleTagsEnum.films, 1)
+
+    print()
+    print(articles[0].title)
+    print(articles[0].text)
+    print(articles[0].article_link)
+    print(articles[0].image_link)
+    print(articles[0].last_update)
+
+    '''
     manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.economy, ArticleTagsEnum.science,
                          ArticleTagsEnum.musics, ArticleTagsEnum.films, ArticleTagsEnum.politics)
 
@@ -16,7 +30,7 @@ def main():
 
     #c_arr = np.arange(0.1, 10000, 100)
     c_arr = [100]
-    sigma_arr = np.arange(0.0001, 2, 0.0001)
+    sigma_arr = np.arange(0.0001, 2, 0.0001) #[0.0209 0.0023 0.0082 0.0167 0.0182 0.0137]
 
     x, y = manager.get_train_data(test_artiles_cnt, dict_len)
 
@@ -39,7 +53,7 @@ def main():
         manager.train_adapters(x, y, c, sigma)
 
     manager.save_all_states()
-
+    '''
     print("Finish")
 
 

@@ -13,12 +13,16 @@ class ArticleTagsEnum(Enum):
 
 class ArticleModel:
     last_update = None
+    title = None
     text = None
     image_link = None
     article_link = None
 
-    def __init__(self, last_update, text, image_link, article_link):
+    '''
+    def __init__(self, title, last_update, text, image_link, article_link):
+        self.title = title
         self.last_update = last_update
         self.text = text
         self.image_link = image_link
         self.article_link = article_link
+    '''
