@@ -20,9 +20,8 @@
 
 <div class="row align-items-end">
     <div class="col display-2">WNews</div>
-    <form method="GET" class="col pb-2" action="/filter_news">
+    <form method="GET" class="col pb-2 pl-4 offset-md-2" action="/filter_news">
         {% csrf_token %}
-        <div class="btn-group blocks" role="group" aria-label="Filter buttons">
             <button type="submit" class="btn btn-outline-primary" name="all">All</button>
             <button type="submit" class="btn btn-outline-success" name="economy">Economy</button>
             <button type="submit" class="btn btn-outline-danger" name="sport">Sport</button>
@@ -30,7 +29,6 @@
             <button type="submit" class="btn btn-outline-warning" name="musics">Music</button>
             <button type="submit" class="btn btn-outline-info" name="films">Films</button>
             <button type="submit" class="btn btn-outline-secondary" name="science">Science</button>
-        </div>
     </form>
 </div>
 
