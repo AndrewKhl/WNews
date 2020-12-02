@@ -4,8 +4,7 @@ import numpy as np
 
 from sklearn import svm
 
-from APIparsers.Models import ArticleTagsEnum
-from MachineLearning.TextManager import TextProcessor, TextManager
+from wnews.NewsSite.MachineLearning.TextManager import TextProcessor, TextManager
 
 
 class SvmManager:

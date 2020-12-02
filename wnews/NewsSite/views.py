@@ -1,20 +1,12 @@
-from django.http import HttpResponse
 from django.shortcuts import render
 
 
-def home(request):
-    news_titles = ["{} title".format(i) for i in range(14)]
-    texts = ["Default text {}".format(i) for i in range(14)]
+from .MachineLearning.TextManager import TextManager
+from .APIparsers.Models import ArticleTagsEnum
 
-    articles = [Article(title, text) for title, text in zip(news_titles, texts)]
+
+def home(request):
+    text_manager = TextManager()
+    articles, texts = text_manager.get_articles(ArticleTagsEnum.all, 15)
 
     return render(request, "news_list.html", locals())
-
-
-class Article:
-    title = ""
-    text = ""
-
-    def __init__(self, title, text):
-        self.title = title
-        self.text = text

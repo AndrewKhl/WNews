@@ -1,9 +1,7 @@
-import numpy as np
 import warnings
 
-from APIparsers.Models import ArticleTagsEnum
-from MachineLearning.SvmLib import SvmManager
-from MachineLearning.TextManager import TextManager
+from wnews.NewsSite.APIparsers.Models import ArticleTagsEnum
+from wnews.NewsSite.MachineLearning.TextManager import TextManager
 
 
 def main():

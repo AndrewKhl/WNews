@@ -7,7 +7,7 @@ import numpy as np
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 
-from APIparsers.TheGuardianParser import TheGuardianParser
+from ..APIparsers.TheGuardianParser import TheGuardianParser
 
 
 class TextManager:

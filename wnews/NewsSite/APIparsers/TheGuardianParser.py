@@ -1,6 +1,6 @@
 import requests
 
-from APIparsers.Models import ArticleModel
+from .Models import ArticleModel
 
 
 class TheGuardianParser:
@@ -20,12 +20,12 @@ class TheGuardianParser:
             if response['status'] == 'ok':
                 for item_article in response['results']:
 
-                    new_article = ArticleModel()
-                    new_article.title = item_article['webTitle']
-                    new_article.article_link = item_article['webUrl']
-                    new_article.last_update = item_article['webPublicationDate']
-                    new_article.text = item_article['fields']['bodyText']
-                    new_article.image_link = item_article['fields']['thumbnail']
+                    new_article = ArticleModel(
+                        title=item_article['webTitle'],
+                        article_link=item_article['webUrl'],
+                        last_update=item_article['webPublicationDate'],
+                        text=item_article['fields']['bodyText'],
+                        image_link=item_article['fields']['thumbnail'])
 
                     articles.append(new_article)
                     count_articles -= 1
