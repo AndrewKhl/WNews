@@ -1,7 +1,7 @@
 import numpy as np
 import warnings
 
-from MachineLearning.TextManager import ArticleTagsEnum
+from APIparsers.Models import ArticleTagsEnum
 from MachineLearning.SvmLib import SvmManager
 
 
@@ -10,13 +10,13 @@ def main():
     manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.economy, ArticleTagsEnum.science,
                          ArticleTagsEnum.musics, ArticleTagsEnum.films, ArticleTagsEnum.politics)
 
-    test_artiles_cnt = 100
-    val_articles_cnt = 10
-    dict_len = 100
+    test_artiles_cnt = 500
+    val_articles_cnt = 100
+    dict_len = 1000
 
-    c_arr = np.arange(0.1, 10000, 100)
-    #c_arr = [100]
-    sigma_arr = np.arange(0.001, 2, 0.0001)
+    #c_arr = np.arange(0.1, 10000, 100)
+    c_arr = [100]
+    sigma_arr = np.arange(0.0001, 2, 0.0001)
 
     x, y = manager.get_train_data(test_artiles_cnt, dict_len)
 
@@ -30,10 +30,10 @@ def main():
         for sigma in sigma_arr:
             manager.train_adapters(x, y, c, sigma)
             manager.check_train_adapters(x_val, y_val)
-
-    print("Precision:", manager._precision_vector)
-    print("C vector:", manager._c_vector)
-    print("Sigma vector:", manager._sigma_vector)
+            print("Sigma:", sigma)
+            print("Best Precision:", manager._precision_vector)
+            print("Best C vector:", manager._c_vector)
+            print("Best Sigma vector:", manager._sigma_vector)
 
     for c, sigma in zip(manager._c_vector, manager._sigma_vector):
         manager.train_adapters(x, y, c, sigma)

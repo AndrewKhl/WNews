@@ -4,8 +4,9 @@ import numpy as np
 
 from sklearn import svm
 
+from APIparsers.Models import ArticleTagsEnum
 from APIparsers.TheGuardianParser import TheGuardianParser
-from MachineLearning.TextManager import ArticleTagsEnum, TextManager
+from MachineLearning.TextManager import TextManager
 
 
 class SvmManager:

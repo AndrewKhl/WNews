@@ -3,19 +3,9 @@ import nltk
 import collections
 import numpy as np
 
-from enum import Enum
+
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
-
-
-class ArticleTagsEnum(Enum):
-    all = 0,
-    sport = 1,
-    economy = 2,
-    science = 3,
-    musics = 4,
-    films = 5,
-    politics = 6
 
 
 class TextManager:
