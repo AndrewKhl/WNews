@@ -24,10 +24,9 @@ class ArticleModel:
     image_link = None
     article_link = None
 
-    def __init__(self, title, last_update, text, image_link, article_link):
+    def __init__(self, title, last_update, text, article_link):
         self.title = title
         self.full_text = text
-        self.image_link = image_link
         self.article_link = article_link
 
         self.text = text[: self._SHORT_TEXT_LENGTH] + '...'

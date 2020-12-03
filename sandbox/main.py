@@ -1,15 +1,18 @@
 import warnings
 
+import numpy as np
+
 from wnews.NewsSite.APIparsers.Models import ArticleTagsEnum
+from wnews.NewsSite.MachineLearning.SvmLib import SvmManager
 from wnews.NewsSite.MachineLearning.TextManager import TextManager
 
 
 def main():
     warnings.filterwarnings('ignore')
-
+    '''
     text_manager = TextManager()
 
-    articles, texts = text_manager.get_articles(ArticleTagsEnum.films, 1)
+    articles, texts = text_manager.get_articles(ArticleTagsEnum.sport, 10)
 
     print()
     print(articles[0].title)
@@ -17,8 +20,8 @@ def main():
     print(articles[0].article_link)
     print(articles[0].image_link)
     print(articles[0].last_update)
-
     '''
+
     manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.economy, ArticleTagsEnum.science,
                          ArticleTagsEnum.musics, ArticleTagsEnum.films, ArticleTagsEnum.politics)
 
@@ -26,9 +29,9 @@ def main():
     val_articles_cnt = 100
     dict_len = 1000
 
-    #c_arr = np.arange(0.1, 10000, 100)
-    c_arr = [100]
-    sigma_arr = np.arange(0.0001, 2, 0.0001) #[0.0209 0.0023 0.0082 0.0167 0.0182 0.0137]
+    c_arr = np.arange(0.1, 10000, 100)
+    #c_arr = [100]
+    sigma_arr = np.arange(0.0001, 2, 0.0003) #[0.0209 0.0023 0.0082 0.0167 0.0182 0.0137]
 
     x, y = manager.get_train_data(test_artiles_cnt, dict_len)
 
@@ -42,7 +45,7 @@ def main():
         for sigma in sigma_arr:
             manager.train_adapters(x, y, c, sigma)
             manager.check_train_adapters(x_val, y_val)
-            print("Sigma:", sigma)
+            print("Sigma:", sigma, "Coef:", c)
             print("Best Precision:", manager._precision_vector)
             print("Best C vector:", manager._c_vector)
             print("Best Sigma vector:", manager._sigma_vector)
@@ -51,7 +54,7 @@ def main():
         manager.train_adapters(x, y, c, sigma)
 
     manager.save_all_states()
-    '''
+
     print("Finish")
 
 

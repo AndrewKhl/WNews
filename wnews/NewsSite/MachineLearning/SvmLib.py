@@ -4,6 +4,7 @@ import numpy as np
 
 from sklearn import svm
 
+from wnews.NewsSite.APIparsers.Models import ArticleTagsEnum
 from wnews.NewsSite.MachineLearning.TextManager import TextProcessor, TextManager
 
 
@@ -30,8 +31,9 @@ class SvmManager:
         Y = None
 
         for tag, adapter in zip(self._tags, self._adapters):
-            _, texts = self._text_manager.get_articles(tag, articles_count)[shift_articles:]
-            new_x, _ = self._text_processor.process_articles(texts, features_count)
+            print(tag, articles_count)
+            _, texts = self._text_manager.get_articles(tag, articles_count)
+            new_x, _ = self._text_processor.process_articles(texts[shift_articles:], features_count)
             Y = self.add_rows(Y, adapter.get_label_matrix(new_x, len(ArticleTagsEnum)))
             X = self.add_rows(X, new_x)
 
