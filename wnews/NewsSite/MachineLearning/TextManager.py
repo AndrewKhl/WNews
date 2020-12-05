@@ -15,7 +15,7 @@ class TextManager:
 
     def get_articles(self, tag, count):
         articles = self._parser.get_articles(tag, count)
-        return articles, [article.text for article in articles]
+        return articles, [article.full_text for article in articles]
 
 
 class TextProcessor:
