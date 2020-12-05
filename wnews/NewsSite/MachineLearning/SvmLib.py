@@ -44,13 +44,14 @@ class SvmManager:
             Y = self.add_rows(Y, new_y)
 
             if save:
-                adapter.save_dictionary(current_dict)
-                #self._database_manager.add_new_articles(tag, texts, new_x, new_y)
+                #adapter.save_dictionary(current_dict)
+                #self._database_manager.create_connection("localhost", "root", "123qwe!", "newsbase")
+                self._database_manager.add_new_articles(tag, texts, new_x, new_y)
 
         return X, Y
 
-    def train_adapters(self, X, Y, C_coef, sigma_coef):
-        for tag, adapter in zip(self._tags, self._adapters):
+    def train_adapters(self, X, Y, C_coef, sigma_arr):
+        for tag, adapter, sigma_coef in zip(self._tags, self._adapters, sigma_arr):
             adapter.train_svm(X, Y[:, tag.value], C_coef, sigma_coef)
             print("Adapter {} has been fitting".format(tag))
 

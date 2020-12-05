@@ -25,16 +25,20 @@ def main():
     manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.economy, ArticleTagsEnum.science,
                          ArticleTagsEnum.musics, ArticleTagsEnum.films, ArticleTagsEnum.politics)
 
-    test_artiles_cnt = 5
+    test_artiles_cnt = 2000
     val_articles_cnt = 100
-    dict_len = 10
+    dict_len = 1200
 
     c_arr = np.arange(0.1, 1000, 100)
     #c_arr = [100]
-    sigma_arr = np.arange(0.0001, 0.01, 0.0001) #[0.0209 0.0023 0.0082 0.0167 0.0182 0.0137]
+    sigma_arr = [0.0209, 0.0023, 0.0082, 0.0167, 0.0182, 0.0137]#np.arange(0.0001, 0.01, 0.0001) #[0.0209 0.0023 0.0082 0.0167 0.0182 0.0137]
 
     x, y = manager.get_train_data(test_artiles_cnt, dict_len, save=True)
     '''
+    manager.train_adapters(x, y, 100, sigma_arr)
+    manager.save_all_states()
+
+
     x_val, y_val = manager.get_train_data(val_articles_cnt + test_artiles_cnt, dict_len, test_artiles_cnt)
 
     print("Xval, yval shape", x_val.shape, y_val.shape)
