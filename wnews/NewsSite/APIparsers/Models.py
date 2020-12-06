@@ -14,7 +14,7 @@ class ArticleTagsEnum(Enum):
 
 class ArticleModel:
     _SHORT_TEXT_LENGTH = 200
-    _DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+    DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
     last_update_obj = None
     last_update = None
@@ -33,7 +33,7 @@ class ArticleModel:
         self.text = text[: self._SHORT_TEXT_LENGTH] + '...'
 
         if type(last_update) is str:
-            self.last_update_obj = datetime.strptime(last_update, self._DATETIME_FORMAT)
+            self.last_update_obj = datetime.strptime(last_update, self.DATETIME_FORMAT)
         else:
             self.last_update_obj = last_update
 

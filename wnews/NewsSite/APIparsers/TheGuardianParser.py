@@ -1,5 +1,6 @@
 import requests
 
+from datetime import datetime, timedelta
 from .Models import ArticleModel
 
 
@@ -19,17 +20,7 @@ class TheGuardianParser:
             response = self._get_response(tag, page_number)
             if response['status'] == 'ok':
                 for item_article in response['results']:
-                    new_article = ArticleModel(
-                        title=item_article['webTitle'],
-                        article_link=item_article['webUrl'],
-                        last_update=item_article['webPublicationDate'],
-                        text=item_article['fields']['bodyText'])
-
-                    if 'thumbnail' in item_article['fields']:
-                        new_article.image_link = item_article['fields']['thumbnail']
-
-                    articles.append(new_article)
-
+                    articles.append(self._json_obj_to_article(item_article))
                     count_articles -= 1
                     if count_articles == 0:
                         break
@@ -37,6 +28,42 @@ class TheGuardianParser:
                 break
 
         return articles
+
+    def get_new_articles(self, tag):
+        articles = []
+        response = self._get_response_with_time(tag)
+        if response['status'] == 'ok':
+            if 'results' in response:
+                for item_article in response['results']:
+                    articles.append(self._json_obj_to_article(item_article))
+        return articles
+
+
+
+    @staticmethod
+    def _json_obj_to_article(item_article):
+        new_article = ArticleModel(
+            title=item_article['webTitle'],
+            article_link=item_article['webUrl'],
+            last_update=item_article['webPublicationDate'],
+            text=item_article['fields']['bodyText'])
+
+        if 'thumbnail' in item_article['fields']:
+            new_article.image_link = item_article['fields']['thumbnail']
+
+        return new_article
+
+    def _get_response_with_time(self, tag):
+        return requests.get(
+            self._API_SOURCE,
+            params={
+                "q": tag.name,
+                "from-date": (datetime.utcnow() - timedelta(minutes=1)).strftime(ArticleModel.DATETIME_FORMAT),
+                "order-by": "newest",
+                "show-fields": "bodyText,thumbnail",
+                "api-key": self._API_KEY
+            }
+        ).json()['response']
 
     def _get_response(self, tag, page):
         return requests.get(

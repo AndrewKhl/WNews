@@ -17,6 +17,9 @@ class TextManager:
         articles = self._parser.get_articles(tag, count)
         return articles, [article.full_text for article in articles]
 
+    def get_new_articles(self, tag):
+        return self._parser.get_new_articles(tag)
+
 
 class TextProcessor:
     _html_regs = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
