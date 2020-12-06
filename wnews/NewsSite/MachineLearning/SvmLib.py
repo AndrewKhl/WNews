@@ -45,8 +45,15 @@ class SvmManager:
 
             if save:
                 #adapter.save_dictionary(current_dict)
-                #self._database_manager.create_connection("localhost", "root", "123qwe!", "newsbase")
-                self._database_manager.add_new_articles(tag, texts, new_x, new_y)
+                #if self._database_manager.connection.is_connected() is False:
+                    #self._database_manager.create_connection("localhost", "root", "123qwe!", "newsbase")
+
+                np_texts_array = np.array_split(np.array(texts), 50)
+                np_x_array = np.array_split(new_x, 50)
+                np_y_array = np.array_split(new_y, 50)
+
+                for nt, nx, ny in zip(np_texts_array, np_x_array, np_y_array):
+                    self._database_manager.add_new_articles(tag, nt, nx, ny)
 
         return X, Y
 

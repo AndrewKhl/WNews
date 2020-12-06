@@ -6,6 +6,8 @@ class DatabaseManager:
     connection = None
     table_names = {}
 
+    _cursor = None
+
     def create_connection(self, host_name, user_name, user_password, db_name):
         try:
             self.connection = mysql.connector.connect(
@@ -45,9 +47,10 @@ class DatabaseManager:
         self._execute_query(add_article_query)
 
     def _execute_query(self, query):
-        cursor = self.connection.cursor()
+        if self._cursor is None:
+            self._cursor = self.connection.cursor()
         try:
-            cursor.execute(query)
+            self._cursor.execute(query)
             self.connection.commit()
             print("Query executed successfully")
         except Error as e:

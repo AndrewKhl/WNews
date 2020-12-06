@@ -23,6 +23,7 @@ class ArticleModel:
     text = None
     image_link = None
     article_link = None
+    tag = None
 
     def __init__(self, title, last_update, text, article_link):
         self.title = title
@@ -30,5 +31,10 @@ class ArticleModel:
         self.article_link = article_link
 
         self.text = text[: self._SHORT_TEXT_LENGTH] + '...'
-        self.last_update_obj = datetime.strptime(last_update, self._DATETIME_FORMAT)
+
+        if type(last_update) is str:
+            self.last_update_obj = datetime.strptime(last_update, self._DATETIME_FORMAT)
+        else:
+            self.last_update_obj = last_update
+
         self.last_update = self.last_update_obj.strftime("%d/%m/%Y %H:%M")

@@ -9,6 +9,7 @@ from wnews.NewsSite.MachineLearning.TextManager import TextManager
 
 def main():
     warnings.filterwarnings('ignore')
+    print(ArticleTagsEnum['sport'])
     '''
     text_manager = TextManager()
 
@@ -21,7 +22,7 @@ def main():
     print(articles[0].image_link)
     print(articles[0].last_update)
     '''
-
+    '''
     manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.economy, ArticleTagsEnum.science,
                          ArticleTagsEnum.musics, ArticleTagsEnum.films, ArticleTagsEnum.politics)
 
@@ -34,7 +35,7 @@ def main():
     sigma_arr = [0.0209, 0.0023, 0.0082, 0.0167, 0.0182, 0.0137]#np.arange(0.0001, 0.01, 0.0001) #[0.0209 0.0023 0.0082 0.0167 0.0182 0.0137]
 
     x, y = manager.get_train_data(test_artiles_cnt, dict_len, save=True)
-    '''
+
     manager.train_adapters(x, y, 100, sigma_arr)
     manager.save_all_states()
 
@@ -58,7 +59,6 @@ def main():
     #manager.save_all_states()
     '''
     print("Finish")
-
 
 if __name__ == '__main__':
     main()
