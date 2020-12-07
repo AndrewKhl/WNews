@@ -22,7 +22,7 @@ svm_dicts = svm_manager.load_add_svm_dicts()
 def home(request):
     svm_manager.load_all_svm_states()
 
-    #load_first_articles(500)
+    load_first_articles(2000)
 
     update_thread = Thread(target=run_news_updates)
     update_thread.start()

@@ -32,14 +32,14 @@ class SvmManager:
         self.create_tables()
         print('SvmManager has been creating')
 
-    def get_train_data(self, articles_count, features_count, shift_articles=0, save=False):
+    def get_train_data(self, articles_count, features_count, shift_articles=0, save=False, dicts=None):
         X = None
         Y = None
 
-        for tag, adapter in zip(self._tags, self._adapters):
+        for tag, adapter, dict in zip(self._tags, self._adapters, dicts):
             print(tag, articles_count)
             _, texts = self._text_manager.get_articles(tag, articles_count)
-            new_x, current_dict = self._text_processor.process_articles(texts[shift_articles:], features_count)
+            new_x, current_dict = self._text_processor.process_articles(texts[shift_articles:], features_count, dict)
             new_y = adapter.get_label_matrix(new_x, len(ArticleTagsEnum))
             X = self.add_rows(X, new_x)
             Y = self.add_rows(Y, new_y)
@@ -48,6 +48,8 @@ class SvmManager:
                 np_texts_array = np.array_split(np.array(texts), 50)
                 np_x_array = np.array_split(new_x, 50)
                 np_y_array = np.array_split(new_y, 50)
+
+                #adapter.save_dictionary(current_dict)
 
                 for nt, nx, ny in zip(np_texts_array, np_x_array, np_y_array):
                     self._database_manager.add_new_articles(tag, nt, nx, ny)
@@ -68,11 +70,12 @@ class SvmManager:
                 self._sigma_vector[i] = adapter.sigma_coef
 
     def predict_article(self, text, dicts):
+        answer = ArticleTagsEnum.all
         for tag, adapter, current_dict in zip(self._tags, self._adapters, dicts):
             x = self._text_processor.process_text(text, current_dict)
             if adapter.predict(x) == 1:
-                return tag
-        return ArticleTagsEnum.all
+                answer = tag
+        return answer
 
     def save_all_states(self):
         for adapter in self._adapters:
