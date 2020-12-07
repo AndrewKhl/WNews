@@ -49,5 +49,5 @@ def update_news():
     else:
         print("New news not be found")
 
-    news_scheduler.enter(10, 1, update_news)
+    news_scheduler.enter(300, 1, update_news)
 

@@ -44,10 +44,6 @@ class SvmManager:
             Y = self.add_rows(Y, new_y)
 
             if save:
-                #adapter.save_dictionary(current_dict)
-                #if self._database_manager.connection.is_connected() is False:
-                    #self._database_manager.create_connection("localhost", "root", "123qwe!", "newsbase")
-
                 np_texts_array = np.array_split(np.array(texts), 50)
                 np_x_array = np.array_split(new_x, 50)
                 np_y_array = np.array_split(new_y, 50)
@@ -69,6 +65,13 @@ class SvmManager:
                 self._precision_vector[i] = current_precision
                 self._c_vector[i] = adapter.C_coef
                 self._sigma_vector[i] = adapter.sigma_coef
+
+    def predict_articles(self, text, dicts):
+        for tag, adapter, current_dict in zip(self._tags, self._adapters, dicts):
+            x, _ = self._text_processor.process_articles(text, current_dict)
+            if adapter.predict(x) == 1:
+                return tag
+        return ArticleTagsEnum.all
 
     def save_all_states(self):
         for adapter in self._adapters:
@@ -109,6 +112,9 @@ class SvmAdapter:
         print("{} SVM Predict: ".format(self._current_tag), good, "Total: ", len(y), "{}%".format(good / len(y) * 100.0))
         return good / len(y) * 100
 
+    def predict(self, x):
+        return self._svm.predict(x)
+
     def get_label_matrix(self, matrix, labels_count):
         label_matrix = np.zeros((len(matrix), labels_count))
         label_matrix[:, self._current_tag.value] = 1
@@ -123,8 +129,11 @@ class SvmAdapter:
     def load_svm_state(self):
         self._svm = joblib.load(self.get_cache_path(self._current_tag))
 
+    def load_dictionary(self):
+        return joblib.load(self.get_dictinary_path(self._current_tag))
+    
     @staticmethod
-    def get_dictinary_path(tag):
+    def get_dictionary_path(tag):
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "CacheModels", "Dictionaries", "{}_dict.plk".format(tag.name))
 
     @staticmethod

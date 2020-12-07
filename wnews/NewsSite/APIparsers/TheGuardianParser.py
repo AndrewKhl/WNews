@@ -58,7 +58,7 @@ class TheGuardianParser:
             self._API_SOURCE,
             params={
                 "q": tag.name,
-                "from-date": (datetime.utcnow() - timedelta(minutes=1)).strftime(ArticleModel.DATETIME_FORMAT),
+                "from-date": (datetime.utcnow() - timedelta(minutes=5)).strftime(ArticleModel.DATETIME_FORMAT),
                 "order-by": "newest",
                 "show-fields": "bodyText,thumbnail",
                 "api-key": self._API_KEY

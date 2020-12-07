@@ -29,6 +29,7 @@ class TextProcessor:
     _number_regs = re.compile('[0-9.]+')
     _text_regs = re.compile('[#&%+:;\[\]/|><=`()@,\'\"!?\-}{*_\-®•“’”…‘–]')
 
+    _current_dict = None
     _porter_stemmer = None
     _stop_worlds = None
 
@@ -44,8 +45,8 @@ class TextProcessor:
         self.current_counter.clear()
         matrix = [self._convert_article(article) for article in articles]
 
-        current_dict = [t[0] for t in self.current_counter.most_common(vector_size)] if dictionary is None else dictionary
-        return np.array([self._get_features_vector(row, current_dict) for row in matrix]), current_dict
+        self._current_dict = [t[0] for t in self.current_counter.most_common(vector_size)] if dictionary is None else dictionary
+        return np.array([self._get_features_vector(row, self._current_dict) for row in matrix]), self._current_dict
 
     @staticmethod
     def _get_features_vector(words, dictionary):

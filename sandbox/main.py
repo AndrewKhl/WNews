@@ -10,8 +10,13 @@ from wnews.NewsSite.MachineLearning.TextManager import TextManager
 def main():
     warnings.filterwarnings('ignore')
     print(ArticleTagsEnum['sport'])
-    '''
+
     text_manager = TextManager()
+
+    articles = text_manager.get_new_articles(ArticleTagsEnum.politics)
+    print(len(articles))
+    '''
+
 
     articles, texts = text_manager.get_articles(ArticleTagsEnum.sport, 10)
 
