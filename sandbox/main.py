@@ -21,7 +21,7 @@ def main():
     articles = text_manager.get_new_articles(ArticleTagsEnum.all)
     print(len(articles))
     for article in articles:
-        print(manager.predict_articles(article.full_text, manager_dicts).name)
+        print(manager.predict_article(article.full_text, manager_dicts).name)
 
     '''
     articles, texts = text_manager.get_articles(ArticleTagsEnum.sport, 10)

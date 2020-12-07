@@ -4,9 +4,9 @@ import numpy as np
 
 from sklearn import svm
 
-from wnews.NewsSite.APIparsers.Models import ArticleTagsEnum
-from wnews.NewsSite.MachineLearning.DatabaseManager import DatabaseManager
-from wnews.NewsSite.MachineLearning.TextManager import TextProcessor, TextManager
+from ..APIparsers.Models import ArticleTagsEnum
+from ..MachineLearning.DatabaseManager import DatabaseManager
+from ..MachineLearning.TextManager import TextProcessor, TextManager
 
 
 class SvmManager:
@@ -30,6 +30,7 @@ class SvmManager:
 
         self._database_manager.create_connection("localhost", "root", "123qwe!", "newsbase")
         self.create_tables()
+        print('SvmManager has been creating')
 
     def get_train_data(self, articles_count, features_count, shift_articles=0, save=False):
         X = None
@@ -66,7 +67,7 @@ class SvmManager:
                 self._c_vector[i] = adapter.C_coef
                 self._sigma_vector[i] = adapter.sigma_coef
 
-    def predict_articles(self, text, dicts):
+    def predict_article(self, text, dicts):
         for tag, adapter, current_dict in zip(self._tags, self._adapters, dicts):
             x = self._text_processor.process_text(text, current_dict)
             if adapter.predict(x) == 1:

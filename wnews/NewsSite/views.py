@@ -3,35 +3,51 @@ import sched, time
 from threading import Thread
 from django.shortcuts import render
 
+from .MachineLearning.SvmLib import SvmManager
 from .MachineLearning.TextManager import TextManager
 from .APIparsers.Models import ArticleTagsEnum
 from .models import DatabaseStorage
 
 update_thread = None
+news_scheduler = sched.scheduler(time.time, time.sleep)
 
 text_manager = TextManager()
 news_storage = DatabaseStorage()
-news_scheduler = sched.scheduler(time.time, time.sleep)
+svm_manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.economy, ArticleTagsEnum.science,
+                         ArticleTagsEnum.musics, ArticleTagsEnum.films, ArticleTagsEnum.politics)
+
+svm_dicts = svm_manager.load_add_svm_dicts()
 
 
 def home(request):
-    #articles, texts = text_manager.get_articles(ArticleTagsEnum.sport, 15)
+    svm_manager.load_all_svm_states()
 
-    #for article in articles:
-    #    article.tag = ArticleTagsEnum.sport
-    #    news_storage.save_news(article)
+    #load_first_articles(500)
+
     update_thread = Thread(target=run_news_updates)
-    articles = news_storage.get_articles(ArticleTagsEnum.sport)
     update_thread.start()
 
+    articles = news_storage.get_articles(ArticleTagsEnum.all)
+    print("Count articles:", len(articles))
     return render(request, "news_list.html", locals())
 
 
 def filter_news(request):
     for item in ArticleTagsEnum:
         if item.name in request.GET:
-            articles, texts = text_manager.get_articles(item, 15)
+            articles = news_storage.get_articles(item)
     return render(request, "news_list.html", locals())
+
+
+def load_first_articles(count):
+    articles, _ = text_manager.get_articles(ArticleTagsEnum.all, count)
+    predict_articles(articles)
+
+
+def predict_articles(articles):
+    for article in articles:
+        article.tag = svm_manager.predict_article(article.full_text, svm_dicts)
+        news_storage.save_news(article)
 
 
 def run_news_updates():
@@ -40,12 +56,11 @@ def run_news_updates():
 
 
 def update_news():
-    articles = text_manager.get_new_articles(ArticleTagsEnum.sport)
+    articles = text_manager.get_new_articles(ArticleTagsEnum.all)
 
     if len(articles) > 0:
-        for article in articles:
-            article.tag = ArticleTagsEnum.sport
-            news_storage.save_news(article)
+        predict_articles(articles)
+        print("New news has been saving")
     else:
         print("New news not be found")
 

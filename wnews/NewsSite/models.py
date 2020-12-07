@@ -28,7 +28,10 @@ class DatabaseStorage:
     @staticmethod
     def get_articles(tag):
         articles = []
-        db_articles = ArticleModelDB.objects.filter(tag=tag.name)
+        if tag == ArticleTagsEnum.all:
+            db_articles = ArticleModelDB.objects.filter()
+        else:
+            db_articles = ArticleModelDB.objects.filter(tag=tag.name)
         for model in db_articles:
             article = ArticleModel(model.title, model.create_time, model.text, model.article_link)
             article.image_link = model.image_link
