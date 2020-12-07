@@ -68,7 +68,7 @@ class SvmManager:
 
     def predict_articles(self, text, dicts):
         for tag, adapter, current_dict in zip(self._tags, self._adapters, dicts):
-            x, _ = self._text_processor.process_articles(text, current_dict)
+            x = self._text_processor.process_text(text, current_dict)
             if adapter.predict(x) == 1:
                 return tag
         return ArticleTagsEnum.all
@@ -76,6 +76,13 @@ class SvmManager:
     def save_all_states(self):
         for adapter in self._adapters:
             adapter.save_svm_state()
+
+    def load_all_svm_states(self):
+        for adapter in self._adapters:
+            adapter.load_svm_state()
+
+    def load_add_svm_dicts(self):
+        return [adapter.load_dictionary() for adapter in self._adapters]
 
     def create_tables(self):
         for tag in self._tags:
@@ -124,14 +131,14 @@ class SvmAdapter:
         joblib.dump(self._svm, self.get_cache_path(self._current_tag))
 
     def save_dictionary(self, dictionary):
-        joblib.dump(dictionary, self.get_dictinary_path(self._current_tag))
+        joblib.dump(dictionary, self.get_dictionary_path(self._current_tag))
 
     def load_svm_state(self):
         self._svm = joblib.load(self.get_cache_path(self._current_tag))
 
     def load_dictionary(self):
-        return joblib.load(self.get_dictinary_path(self._current_tag))
-    
+        return joblib.load(self.get_dictionary_path(self._current_tag))
+
     @staticmethod
     def get_dictionary_path(tag):
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "CacheModels", "Dictionaries", "{}_dict.plk".format(tag.name))

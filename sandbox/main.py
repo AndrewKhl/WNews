@@ -9,15 +9,21 @@ from wnews.NewsSite.MachineLearning.TextManager import TextManager
 
 def main():
     warnings.filterwarnings('ignore')
-    print(ArticleTagsEnum['sport'])
-
     text_manager = TextManager()
 
-    articles = text_manager.get_new_articles(ArticleTagsEnum.politics)
+    manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.economy, ArticleTagsEnum.science,
+                         ArticleTagsEnum.musics, ArticleTagsEnum.films, ArticleTagsEnum.politics)
+
+    manager.load_all_svm_states()
+    manager_dicts = manager.load_add_svm_dicts()
+    print(len(manager_dicts))
+
+    articles = text_manager.get_new_articles(ArticleTagsEnum.all)
     print(len(articles))
+    for article in articles:
+        print(manager.predict_articles(article.full_text, manager_dicts).name)
+
     '''
-
-
     articles, texts = text_manager.get_articles(ArticleTagsEnum.sport, 10)
 
     print()
@@ -28,9 +34,7 @@ def main():
     print(articles[0].last_update)
     '''
     '''
-    manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.economy, ArticleTagsEnum.science,
-                         ArticleTagsEnum.musics, ArticleTagsEnum.films, ArticleTagsEnum.politics)
-
+    
     test_artiles_cnt = 2000
     val_articles_cnt = 100
     dict_len = 1200
