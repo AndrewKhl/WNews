@@ -16,6 +16,13 @@ def main():
 
     manager.load_all_svm_states()
     manager_dicts = manager.load_add_svm_dicts()
+
+    print()
+    print("Politics dictionary:")
+
+    for word in manager_dicts[5]:
+        print(word)
+
     #print(len(manager_dicts))
 
     #articles = text_manager.get_new_articles(ArticleTagsEnum.all)
@@ -33,7 +40,7 @@ def main():
     print(articles[0].image_link)
     print(articles[0].last_update)
     '''
-
+    '''
     test_artiles_cnt = 2400
     val_articles_cnt = 100
     dict_len = 1200
@@ -50,7 +57,7 @@ def main():
     print("Best Sigma vector:", manager._sigma_vector)
     #manager.train_adapters(x, y, 100, sigma_arr)
     #manager.save_all_states()
-
+    '''
     '''
     x_val, y_val = manager.get_train_data(val_articles_cnt + test_artiles_cnt, dict_len, test_artiles_cnt)
 
