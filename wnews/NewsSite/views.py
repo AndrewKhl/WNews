@@ -5,7 +5,7 @@ from django.shortcuts import render
 
 from .MachineLearning.SvmLib import SvmManager
 from .MachineLearning.TextManager import TextManager
-from .APIparsers.Models import ArticleTagsEnum
+from .APIparsers.ApiModels import ArticleTagsEnum
 from .models import DatabaseStorage
 
 update_thread = None

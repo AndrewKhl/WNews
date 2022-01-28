@@ -4,9 +4,9 @@ import numpy as np
 
 from sklearn import svm
 
-from ..APIparsers.Models import ArticleTagsEnum
-from ..MachineLearning.DatabaseManager import DatabaseManager
-from ..MachineLearning.TextManager import TextProcessor, TextManager
+from .DatabaseManager import DatabaseManager
+from .TextManager import TextProcessor, TextManager
+from ..APIparsers.ApiModels import ArticleTagsEnum
 
 
 class SvmManager:

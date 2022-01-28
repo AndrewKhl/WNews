@@ -1,10 +1,11 @@
 import requests
 
 from datetime import datetime, timedelta
-from .Models import ArticleModel
+from .ApiModels import ArticleModel
+from .BaseParser import BaseParser
 
 
-class TheGuardianParser:
+class TheGuardianParser(BaseParser):
     _MAX_PAGE_SIZE = 50
     _API_SOURCE = 'http://content.guardianapis.com/search'
     _API_KEY = '5dd8bff4-9d3a-43c5-8526-5743161d4992'
@@ -37,8 +38,6 @@ class TheGuardianParser:
                 for item_article in response['results']:
                     articles.append(self._json_obj_to_article(item_article))
         return articles
-
-
 
     @staticmethod
     def _json_obj_to_article(item_article):

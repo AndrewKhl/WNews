@@ -1,7 +1,7 @@
 from django.db import models
 from datetime import datetime
 
-from .APIparsers.Models import ArticleModel, ArticleTagsEnum
+from .APIparsers.ApiModels import ArticleModel, ArticleTagsEnum
 
 
 class ArticleModelDB(models.Model):
