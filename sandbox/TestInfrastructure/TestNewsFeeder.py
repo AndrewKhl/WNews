@@ -17,4 +17,4 @@ while True:
     producer.send('TestRawData', value=kafka_massage)
 
     print(message)
-    time.sleep(10)
+    time.sleep(30)
