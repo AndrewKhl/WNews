@@ -9,7 +9,7 @@ class TheGuardianFeeder(BaseFeeder):
     _API_KEY = '5dd8bff4-9d3a-43c5-8526-5743161d4992'
     _SOURCE_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
-    def get_new_articles(self):
+    def request_to_source(self):
         return requests.get(
             self._API_SOURCE,
             params={
@@ -21,6 +21,9 @@ class TheGuardianFeeder(BaseFeeder):
                 "page": 1,
             }
         ).json()['response']
+
+    def get_news_items(self, response):
+        return response['results'] if 'results' in response else None
 
     def convert_to_raw_news(self, source_response):
         news = []

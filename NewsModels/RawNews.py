@@ -19,7 +19,7 @@ class RawNews:
         self.received_time = str(datetime.utcnow())
 
     def __str__(self):
-        return f'{self.source} {self.title} {self.received_time}'
+        return f'{self.source} {self.title} {self.received_time} {self.news_time} {self.web_link} {self.text}'
 
     def __repr__(self):
         return str(self)

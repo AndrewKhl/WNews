@@ -12,8 +12,12 @@ class BaseFeeder:
                                        value_serializer=lambda x: x.toJSON().encode('utf-8'))
 
     @abstractmethod
-    def get_new_articles(self):
-        "Получить новости из источника"
+    def request_to_source(self):
+        "Запрос к источнику"
+
+    @abstractmethod
+    def get_news_items(self, response):
+        "Получить массив новостей из запроса"
 
     @abstractmethod
     def convert_to_raw_news(self, source_response):
@@ -21,14 +25,12 @@ class BaseFeeder:
 
     def start(self):
         while True:
-            source_response = self.get_new_articles()
-            if source_response['status'] == 'ok':
-                if 'results' in source_response:
-                    items = source_response['results']
-                    if len(items) > 0:
-                        news = self.convert_to_raw_news(items)
-                        print(news)
-                        for ne in news:
-                            self._producer.send("RawNewsCollection", value=ne)
+            source_response = self.request_to_source()
+            if source_response['status'].lower() == 'ok':
+                items = self.get_news_items(source_response)
+                if items is not None and len(items) > 0:
+                    news = self.convert_to_raw_news(items)
+                    for ne in news:
+                        self._producer.send("RawNewsCollection", value=ne)
             time.sleep(self._update_time)
 
