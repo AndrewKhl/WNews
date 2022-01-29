@@ -1,9 +1,6 @@
 from pymongo import MongoClient
-import pymongo
-
 
 CONNECTION_STRING = "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
-
 
 def main():
     client = MongoClient(CONNECTION_STRING)
