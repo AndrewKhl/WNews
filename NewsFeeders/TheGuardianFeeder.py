@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime, timedelta
 from BaseFeeder import BaseFeeder
-from NewsModels.RawNews import RawNews
+from NewsModels.Models import RawNews
 
 
 class TheGuardianFeeder(BaseFeeder):
@@ -16,7 +16,7 @@ class TheGuardianFeeder(BaseFeeder):
                 "api-key": self._API_KEY,
                 # "from-date": (datetime.utcnow() - timedelta(seconds=self._update_time)).strftime(self._SOURCE_DATETIME_FORMAT),
                 "order-by": "newest",
-                "show-fields": "bodyText",
+                "show-fields": "bodyText,thumbnail",
                 "page-size": 5,
                 "page": 1,
             }
@@ -32,7 +32,8 @@ class TheGuardianFeeder(BaseFeeder):
                         title=item['webTitle'],
                         link=item['webUrl'],
                         text=item['fields']['bodyText'],
-                        time=item['webPublicationDate'])
+                        image=item['fields']['thumbnail'],
+                        time=item['webPublicationDate'],)
             news.append(n)
         return news
 

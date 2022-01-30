@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime, timedelta
 from BaseFeeder import BaseFeeder
-from NewsModels.RawNews import RawNews
+from NewsModels.Models import RawNews
 
 
 class TheNYTimesFeeder(BaseFeeder):
@@ -32,7 +32,8 @@ class TheNYTimesFeeder(BaseFeeder):
                         title=item['headline']['main'],
                         link=item['web_url'],
                         text=f'{item["snippet"]} {item["lead_paragraph"]}',
-                        time=item['pub_date'])
+                        time=item['pub_date'],
+                        image=item['multimedia'][0]['url'])
             news.append(n)
         return news
 

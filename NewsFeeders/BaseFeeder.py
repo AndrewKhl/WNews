@@ -28,6 +28,7 @@ class BaseFeeder:
             source_response = self.request_to_source()
             if source_response['status'].lower() == 'ok':
                 items = self.get_news_items(source_response)
+                print(items)
                 if items is not None and len(items) > 0:
                     news = self.convert_to_raw_news(items)
                     for ne in news:
