@@ -3,32 +3,32 @@ import sched, time
 from threading import Thread
 from django.shortcuts import render
 
-from .MachineLearning.SvmLib import SvmManager
-from .MachineLearning.TextManager import TextManager
-from .APIparsers.ApiModels import ArticleTagsEnum
-from .models import DatabaseStorage
+#from .MachineLearning.SvmLib import SvmManager
+#from .MachineLearning.TextManager import TextManager
+#from .APIparsers.ApiModels import ArticleTagsEnum
+#from .models import DatabaseStorage
 
-update_thread = None
-news_scheduler = sched.scheduler(time.time, time.sleep)
+#update_thread = None
+#news_scheduler = sched.scheduler(time.time, time.sleep)
 
-text_manager = TextManager()
-news_storage = DatabaseStorage()
-svm_manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.economy, ArticleTagsEnum.science,
-                         ArticleTagsEnum.musics, ArticleTagsEnum.films, ArticleTagsEnum.politics)
+#text_manager = TextManager()
+#news_storage = DatabaseStorage()
+#svm_manager = SvmManager(ArticleTagsEnum.sport, ArticleTagsEnum.economy, ArticleTagsEnum.science,
+                         #ArticleTagsEnum.musics, ArticleTagsEnum.films, ArticleTagsEnum.politics)
 
-svm_dicts = svm_manager.load_add_svm_dicts()
+#svm_dicts = svm_manager.load_add_svm_dicts()
 
 
 def home(request):
-    svm_manager.load_all_svm_states()
+    #svm_manager.load_all_svm_states()
 
-    load_first_articles(2000)
+    #load_first_articles(2000)
 
-    update_thread = Thread(target=run_news_updates)
-    update_thread.start()
+    #update_thread = Thread(target=run_news_updates)
+    #update_thread.start()
 
-    articles = news_storage.get_articles(ArticleTagsEnum.all)
-    print("Count articles:", len(articles))
+    #articles = news_storage.get_articles(ArticleTagsEnum.all)
+    #print("Count articles:", len(articles))
     return render(request, "news_list.html", locals())
 
 

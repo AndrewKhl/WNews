@@ -4,20 +4,11 @@ import joblib
 import nltk
 import numpy as np
 
-from enum import Enum
+
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 
-from ProcessedNews import ProcessedNews
-
-
-class TagsEnum(Enum):
-    sport = 0,
-    economy = 1,
-    science = 2,
-    musics = 3,
-    films = 4,
-    politics = 5
+from ProcessedNews import ProcessedNews, TagsEnum
 
 
 class TextProcessor:

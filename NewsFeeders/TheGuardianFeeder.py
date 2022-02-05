@@ -14,11 +14,11 @@ class TheGuardianFeeder(BaseFeeder):
             self._API_SOURCE,
             params={
                 "api-key": self._API_KEY,
-                # "from-date": (datetime.utcnow() - timedelta(seconds=self._update_time)).strftime(self._SOURCE_DATETIME_FORMAT),
+                "from-date": (datetime.utcnow() - timedelta(seconds=self._update_time)).strftime(self._SOURCE_DATETIME_FORMAT),
                 "order-by": "newest",
                 "show-fields": "bodyText,thumbnail",
-                "page-size": 5,
-                "page": 1,
+                # "page-size": 5,
+                # "page": 1,
             }
         ).json()['response']
 
@@ -38,5 +38,5 @@ class TheGuardianFeeder(BaseFeeder):
         return news
 
 
-guardianFeeder = TheGuardianFeeder(update_time=10)
+guardianFeeder = TheGuardianFeeder(update_time=60)
 guardianFeeder.start()

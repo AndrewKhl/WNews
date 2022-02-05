@@ -25,7 +25,7 @@ SECRET_KEY = '5g2ip2f%*ochi)zawrphbj8u93g4w51$dpam@6f1-^gv!6p5#='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['wnews.com', '.wnews.com']
 
 
 # Application definition
@@ -76,13 +76,21 @@ WSGI_APPLICATION = 'wnews.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
+    #'default': {
+    #    'ENGINE': 'django.db.backends.mysql',
+    #    'NAME': 'newsbase',
+    #    'USER': 'root',
+    #    'PASSWORD': '123qwe!',
+    #    'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+    #    'PORT': '3306',
+    #}
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'newsbase',
-        'USER': 'root',
-        'PASSWORD': '123qwe!',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'NewsSiteEnvironmentDB',
+        'USER': 'postgres',
+        'PASSWORD': '123456',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
+        'PORT': '5432',
     }
 }
 

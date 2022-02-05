@@ -11,7 +11,7 @@ from ..APIparsers.TheGuardianParser import TheGuardianParser
 
 
 class TextManager:
-    _parser = TheGuardianParser()
+    #_parser = TheGuardianParser()
 
     def get_articles(self, tag, count):
         articles = self._parser.get_articles(tag, count)

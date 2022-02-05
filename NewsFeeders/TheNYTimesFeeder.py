@@ -9,16 +9,18 @@ class TheNYTimesFeeder(BaseFeeder):
     _API_KEY = 'nQnmGmGuvIhGcnLChoLoKRVRuCuB3buG'
     _SOURCE_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
+    _page_number = -1
+
     def request_to_source(self):
+        self._page_number += 1
         return requests.get(
             self._API_SOURCE,
             params={
                 "api-key": self._API_KEY,
                 "source": "The New York Times",
-                # "from-date": (datetime.utcnow() - timedelta(seconds=self._update_time)).strftime(self._SOURCE_DATETIME_FORMAT),
                 "sort": "newest",
                 "fq": "The New York Times",
-                "page": 1,
+                "page": self._page_number
             }
         ).json()
 
@@ -33,10 +35,12 @@ class TheNYTimesFeeder(BaseFeeder):
                         link=item['web_url'],
                         text=f'{item["snippet"]} {item["lead_paragraph"]}',
                         time=item['pub_date'],
-                        image=item['multimedia'][0]['url'])
+                        image=None)
+            if 'multimedia' in source_response and len(item['multimedia']) > 0:
+                n.image_link = item['multimedia'][0]['url']
             news.append(n)
         return news
 
 
-timesFeeder = TheNYTimesFeeder(update_time=10)
+timesFeeder = TheNYTimesFeeder(update_time=60)
 timesFeeder.start()

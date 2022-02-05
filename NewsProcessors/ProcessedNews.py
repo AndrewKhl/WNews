@@ -1,6 +1,17 @@
 import faust
+
+from enum import Enum
 from typing import Dict, List
 from faust.models.fields import IntegerField
+
+
+class TagsEnum(Enum):
+    sport = 0,
+    economy = 1,
+    science = 2,
+    musics = 3,
+    films = 4,
+    politics = 5
 
 
 class ProcessedNews(faust.Record, serializer='json'):
