@@ -4,47 +4,55 @@
 
 {% block load_style %}
 <style>
-.blocks .btn
-{
+.blocks .btn {
     margin: 0 5px;
     border-radius: 5;
+}
+
+body {
+    background-image: url({{request.tenant.background_image}});
+    background-repeat: no-repeat;
+    width: 100%;
+    justify-content: center;
 }
 </style>
 {% endblock load_style %}
 
 {% block main %}
+<div class="main-container">
+    <div class="row align-items-end">
+        <div class="col-2 offset-1 display-2">WNews</div>
+        <div class="col-5 display-3 font-weight-bold text-center">{{request.tenant.feeder_name}}</div>
+        <form method="GET" class="col-4" action="/filter_news">
+            {% csrf_token %}
+                <button type="submit" class="btn btn-outline-primary" name="all">All</button>
+                <button type="submit" class="btn btn-outline-success" name="economy">Economy</button>
+                <button type="submit" class="btn btn-outline-danger" name="sport">Sport</button>
+                <button type="submit" class="btn btn-outline-dark" name="politics">Politics</button>
+                <button type="submit" class="btn btn-outline-warning" name="musics">Music</button>
+                <button type="submit" class="btn btn-outline-info" name="films">Films</button>
+                <button type="submit" class="btn btn-outline-secondary" name="science">Science</button>
+        </form>
+    </div>
 
-<div class="row align-items-end">
-    <div class="col display-2">WNews</div>
-    <form method="GET" class="col pb-2 pl-4 offset-md-2" action="/filter_news">
-        {% csrf_token %}
-            <button type="submit" class="btn btn-outline-primary" name="all">All</button>
-            <button type="submit" class="btn btn-outline-success" name="economy">Economy</button>
-            <button type="submit" class="btn btn-outline-danger" name="sport">Sport</button>
-            <button type="submit" class="btn btn-outline-dark" name="politics">Politics</button>
-            <button type="submit" class="btn btn-outline-warning" name="musics">Music</button>
-            <button type="submit" class="btn btn-outline-info" name="films">Films</button>
-            <button type="submit" class="btn btn-outline-secondary" name="science">Science</button>
-    </form>
-</div>
-
-<div class="row row-cols-1 row-cols-md-4 g-4">
-    {% for article in articles %}
-    <div class="col">
-        <div class="card h-100">
-            <div class="card-header text-right">
-                <small class="text-muted">Date: {{article.last_update}}</small>
-            </div>
-            <img src="{{article.image_link}}" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">{{article.title}}</h5>
-                <p class="card-text">{{article.text}}</p>
-            </div>
-            <div class="card-footer text-right">
-                <a href="{{article.article_link}}" class="card-link">Read more...</a>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for article in articles %}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-header text-right">
+                    <small class="text-muted">Date: {{article.last_update}}</small>
+                </div>
+                <img src="{{article.image_link}}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{article.title}}</h5>
+                    <p class="card-text">{{article.text}}</p>
+                </div>
+                <div class="card-footer text-right">
+                    <a href="{{article.article_link}}" class="card-link">Read more...</a>
+                </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock main %}

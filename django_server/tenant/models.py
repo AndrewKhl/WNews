@@ -6,7 +6,8 @@ from django_tenants.models import DomainMixin, TenantMixin
 class Tenant(TenantMixin):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     feeder_name = models.CharField(max_length=50)
-    background_image = models.ImageField(null=True, blank=True, upload_to="profile")
+    #background_image = models.ImageField(null=True, blank=True, upload_to="profile")
+    background_image = models.CharField(max_length=256, null=True)
 
     featured = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True, null=True)
