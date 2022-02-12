@@ -34,10 +34,10 @@ class TheNYTimesFeeder(BaseFeeder):
                         title=item['headline']['main'],
                         link=item['web_url'],
                         text=f'{item["snippet"]} {item["lead_paragraph"]}',
-                        time=item['pub_date'],
+                        time=item['pub_date'][:-5],
                         image=None)
-            if 'multimedia' in source_response and len(item['multimedia']) > 0:
-                n.image_link = item['multimedia'][0]['url']
+            if 'multimedia' in item and len(item['multimedia']) > 0:
+                n.image_link = "https://static01.nyt.com/" + item['multimedia'][0]['url']
             news.append(n)
         return news
 
